@@ -1,6 +1,5 @@
 """Love Sandwiches Walk Through Project with Code Institute for Portfolio Project 3"""
 
-from pprint import pprint
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -29,7 +28,7 @@ def get_sales_data():
         print("Data should be six numbers, separated by commas.")
         print("Example: 10,20,30,40,50,60\n")
 
-        data_str = input("Enter your data here: ")
+        data_str = input("Enter your data here:\n")
 
         sales_data = data_str.split(",")
 
@@ -129,7 +128,19 @@ def main():
     update_worksheet(new_surplus_data, 'surplus')
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
+    return stock_data
 
 
 print('Welcome to Love Sandwiches Data Automation')
-main()
+stock_data = main()
+
+def get_stock_values(data):
+    """
+    Get stock values and create dictionary for stock values
+    from the headings in the worksheet and the new values for stock
+    """
+    headings = SHEET.worksheet("stock").row_values(1)
+    return {heading:value for heading, value in zip(headings, data)}
+
+stock_values = get_stock_values(stock_data)
+print(stock_values)
